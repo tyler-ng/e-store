@@ -79,7 +79,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
             {name}
           </Link>
         </h3>
-        
+        z
         {/* Ratings */}
         <div className="flex items-center mb-2">
           <div className="flex text-yellow-400">

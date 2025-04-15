@@ -1,8 +1,17 @@
+
 import React from 'react';
 import Link from 'next/link';
-import Navbar from '@/components/Navbar';
+import { Suspense } from 'react';
+import Navbar from '../components/Navbar';
+import ProductCard from '../components/ProductCard';
+import { fetchHomePageData } from './actions';
+import { getPopularCategories } from '../lib/categories';
 
-export default function Home() {
+export default async function Home() {
+  // Fetch data for homepage
+  const { featuredProducts, newArrivals, saleItems } = await fetchHomePageData();
+  const popularCategories = await getPopularCategories();
+
   return (
     <main className="min-h-screen bg-white">
       {/* Top Navigation Bar */}
@@ -10,51 +19,25 @@ export default function Home() {
 
       {/* Hero Carousel/Slider */}
       <div className="relative w-full overflow-hidden">
-        {/* Carousel container */}
         <div className="relative">
-          {/* Current slide - April Deals */}
-          <div className="relative">
-            <div className="relative w-full h-[400px] bg-purple-200">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full h-full relative flex">
-                  {/* Left side - product images */}
-                  <div className="w-3/5 relative">
-                    {/* Product images placed on purple background */}
-                    <div className="absolute top-16 left-12">
-                      <div className="w-32 h-40 bg-white/20 rounded-lg shadow-lg flex items-center justify-center">
-                        <div className="w-24 h-24 bg-[url('/api/placeholder/100/100')] bg-contain bg-center bg-no-repeat"></div>
-                      </div>
-                    </div>
-                    <div className="absolute top-40 left-40">
-                      <div className="w-44 h-52 bg-white/20 rounded-lg shadow-lg flex items-center justify-center">
-                        <div className="w-36 h-36 bg-[url('/api/placeholder/150/150')] bg-contain bg-center bg-no-repeat"></div>
-                      </div>
-                    </div>
-                    <div className="absolute bottom-20 left-20">
-                      <div className="w-36 h-36 bg-white/20 rounded-lg shadow-lg flex items-center justify-center">
-                        <div className="w-28 h-28 bg-[url('/api/placeholder/120/120')] bg-contain bg-center bg-no-repeat"></div>
-                      </div>
-                    </div>
-                    <div className="absolute bottom-32 right-20">
-                      <div className="w-32 h-32 bg-white/20 rounded-lg shadow-lg flex items-center justify-center">
-                        <div className="w-24 h-24 bg-[url('/api/placeholder/100/100')] bg-contain bg-center bg-no-repeat"></div>
-                      </div>
-                    </div>
+          <div className="relative w-full h-[400px] bg-purple-200">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full h-full relative flex">
+                <div className="w-3/5 relative">
+                  {/* Product images would go here */}
+                </div>
+                
+                <div className="w-2/5 flex flex-col justify-center pr-12">
+                  <h2 className="text-7xl font-serif text-purple-900 leading-tight">
+                    APRIL<span className="text-white font-light">deals</span>
+                  </h2>
+                  <div className="flex items-center mt-4">
+                    <span className="uppercase text-purple-800 text-5xl font-bold mr-4">UPTO</span>
+                    <span className="text-9xl font-bold text-gray-300 opacity-80">60<span className="text-6xl">%</span></span>
                   </div>
-                  
-                  {/* Right side - text content */}
-                  <div className="w-2/5 flex flex-col justify-center pr-12">
-                    <h2 className="text-7xl font-serif text-purple-900 leading-tight">
-                      APRIL<span className="text-white font-light">deals</span>
-                    </h2>
-                    <div className="flex items-center mt-4">
-                      <span className="uppercase text-purple-800 text-5xl font-bold mr-4">UPTO</span>
-                      <span className="text-9xl font-bold text-gray-300 opacity-80">60<span className="text-6xl">%</span></span>
-                    </div>
-                    <div className="text-5xl text-purple-800 uppercase font-bold mt-2">OFF</div>
-                    <div className="mt-6 bg-purple-400 bg-opacity-50 text-white text-xl py-2 px-6 rounded-full inline-block">
-                      April 1st - April 30th
-                    </div>
+                  <div className="text-5xl text-purple-800 uppercase font-bold mt-2">OFF</div>
+                  <div className="mt-6 bg-purple-400 bg-opacity-50 text-white text-xl py-2 px-6 rounded-full inline-block">
+                    April 1st - April 30th
                   </div>
                 </div>
               </div>
@@ -86,109 +69,29 @@ export default function Home() {
       <section className="max-w-screen-xl mx-auto px-4 py-12">
         <div className="flex justify-between items-center mb-8">
           <h2 className="text-3xl font-bold text-gray-800">NEW ARRIVALS</h2>
-          <Link href="/product" className="text-gray-600 hover:text-gray-900 underline">
-            View all
-          </Link>
+          <Link href="/category/new-arrivals" className="text-gray-600 hover:text-gray-900 underline">View all</Link>
         </div>
 
-        {/* Product Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {/* Product 1 */}
-          <div className="flex flex-col">
-            <div className="relative mb-4">
-              <img src="/sample-1.jpg" alt="Tippi 4 Steps Pedicure Kit" className="w-[214px] h-[214px] object-contain mx-auto"  />
-            </div>
-            <div className="flex flex-col flex-grow">
-              <div className="text-gray-500">Tippi</div>
-              <h3 className="text-lg font-bold mb-2">Tippi 4 Steps Pedicure Kit</h3>
-              <div className="mb-2">
-                <span className="text-gray-800 font-bold">From $3.00 CAD</span>
-              </div>
-              <div className="flex space-x-2 mb-4">
-                <button className="w-6 h-6 rounded-full bg-gray-300 border border-gray-400"></button>
-                <button className="w-6 h-6 rounded-full bg-white border border-gray-400"></button>
-                <button className="w-6 h-6 rounded-full bg-gray-100 border border-gray-400"></button>
-                <button className="w-6 h-6 rounded-full bg-gray-200 border border-gray-400"></button>
-                <span className="text-gray-600">+5</span>
-              </div>
-              <div className="mt-auto">
-                <button className="w-full bg-gray-800 text-white py-3 rounded-md hover:bg-gray-700 transition">
-                  CHOOSE OPTIONS
-                </button>
-              </div>
-            </div>
+        <Suspense fallback={<div>Loading products...</div>}>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {newArrivals.map(product => (
+              <ProductCard 
+                key={product.id}
+                id={product.id}
+                brand={product.brand}
+                name={product.name}
+                image={product.image}
+                rating={product.rating}
+                reviewCount={product.reviewCount}
+                price={product.price}
+                originalPrice={product.originalPrice}
+                discount={product.discount}
+                slug={product.slug}
+                hasOptions={product.hasOptions}
+              />
+            ))}
           </div>
-
-          {/* Product 2 */}
-          <div className="flex flex-col">
-            <div className="relative mb-4">
-              <div className="absolute top-2 left-2 bg-purple-700 text-white px-4 py-1 flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
-                </svg>
-                20% off
-              </div>
-              <img src="/sample-1.jpg" alt="DND DC Mermaid 229 Claret" className="w-[214px] h-[214px] object-contain mx-auto"  />
-            </div>
-            <div className="flex flex-col flex-grow">
-              <div className="text-gray-500">DND</div>
-              <h3 className="text-lg font-bold mb-2">DND DC Mermaid 229 Claret</h3>
-              <div className="mb-4">
-                <span className="text-gray-800 font-bold">$11.99 CAD</span>
-                <span className="text-gray-500 line-through ml-2">$15.00 CAD</span>
-              </div>
-              <div className="mt-auto">
-                <button className="w-full bg-gray-800 text-white py-3 rounded-md hover:bg-gray-700 transition">
-                  ADD TO CART
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Product 3 */}
-          <div className="flex flex-col">
-            <div className="relative mb-4">
-              <img src="/sample-1.jpg" alt="Korean Sandpaper Regular Nail X File" className="w-[214px] h-[214px] object-contain mx-auto"  />
-            </div>
-            <div className="flex flex-col flex-grow">
-              <div className="text-gray-500">JNBS</div>
-              <h3 className="text-lg font-bold mb-2">Korean Sandpaper Regular Nail X File Gold Wood Board (3 Grit Sizes)</h3>
-              <div className="mb-4">
-                <span className="text-gray-800 font-bold">$10.50 CAD</span>
-              </div>
-              <div className="mt-auto">
-                <button className="w-full bg-gray-800 text-white py-3 rounded-md hover:bg-gray-700 transition">
-                  CHOOSE OPTIONS
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Product 4 */}
-          <div className="flex flex-col">
-            <div className="relative mb-4">
-              <img src="/sample-1.jpg" alt="Tippi Massage Lotion" className="w-[214px] h-[214px] object-contain mx-auto"  />
-            </div>
-            <div className="flex flex-col flex-grow">
-              <div className="text-gray-500">Tippi</div>
-              <h3 className="text-lg font-bold mb-2">Tippi Massage Lotion (4 scents)</h3>
-              <div className="mb-2">
-                <span className="text-gray-800 font-bold">From $10.00 CAD</span>
-              </div>
-              <div className="flex space-x-2 mb-4">
-                <button className="w-6 h-6 rounded-full bg-gray-300 border border-gray-400"></button>
-                <button className="w-6 h-6 rounded-full bg-white border border-gray-400"></button>
-                <button className="w-6 h-6 rounded-full bg-gray-100 border border-gray-400"></button>
-                <button className="w-6 h-6 rounded-full bg-gray-200 border border-gray-400"></button>
-              </div>
-              <div className="mt-auto">
-                <button className="w-full bg-gray-800 text-white py-3 rounded-md hover:bg-gray-700 transition">
-                  CHOOSE OPTIONS
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+        </Suspense>
       </section>
 
       {/* Divider */}
@@ -202,130 +105,42 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Popular Categories Section */}
+      {/* POPULAR CATEGORIES */}
       <section className="max-w-screen-xl mx-auto px-4 py-12">
         <h2 className="text-3xl font-bold text-gray-800 mb-8">POPULAR CATEGORIES</h2>
         
-        {/* Category Grid - First Row */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-          {/* BOSSYGEL */}
-          
-          <Link href="/product">
-            <div className="relative overflow-hidden group">
+          {popularCategories.slice(0, 4).map(category => (
+            <Link key={category.id} href={`/category/${category.slug}`} className="relative overflow-hidden group">
               <div className="aspect-square bg-purple-100 overflow-hidden">
-                <img src="/api/placeholder/400/400" alt="BOSSYGEL" className="w-full h-full object-cover opacity-80" />
+                <img 
+                  src={category.image || "/api/placeholder/400/400"} 
+                  alt={category.name} 
+                  className="w-full h-full object-cover opacity-80"
+                />
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <h3 className="text-3xl font-bold text-white">BOSSYGEL</h3>
+                  <h3 className="text-3xl font-bold text-white">{category.name}</h3>
                 </div>
               </div>
-            </div>  
-          </Link>
-          
-          {/* DND */}
-          <div className="relative overflow-hidden group">
-            <div className="aspect-square bg-purple-100 overflow-hidden">
-              <img src="/api/placeholder/400/400" alt="DND" className="w-full h-full object-cover opacity-80" />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <h3 className="text-3xl font-bold text-white">DND</h3>
-              </div>
-            </div>
-          </div>
-          
-          {/* APRES */}
-          <div className="relative overflow-hidden group">
-            <div className="aspect-square bg-purple-100 overflow-hidden">
-              <img src="/api/placeholder/400/400" alt="APRES" className="w-full h-full object-cover opacity-80" />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <h3 className="text-3xl font-bold text-white">APRES</h3>
-              </div>
-            </div>
-          </div>
-          
-          {/* NOTPOLISH */}
-          <div className="relative overflow-hidden group">
-            <div className="aspect-square bg-purple-100 overflow-hidden">
-              <img src="/api/placeholder/400/400" alt="NOTPOLISH" className="w-full h-full object-cover opacity-80" />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <h3 className="text-3xl font-bold text-white">NOTPOLISH</h3>
-              </div>
-            </div>
-          </div>
+            </Link>
+          ))}
         </div>
         
-        {/* Category Grid - Second Row */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-          {/* OPI */}
-          <div className="relative overflow-hidden group">
-            <div className="aspect-square bg-purple-100 overflow-hidden">
-              <img src="/api/placeholder/400/400" alt="OPI" className="w-full h-full object-cover opacity-80" />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <h3 className="text-3xl font-bold text-white">OPI</h3>
+          {popularCategories.slice(4, 8).map(category => (
+            <Link key={category.id} href={`/category/${category.slug}`} className="relative overflow-hidden group">
+              <div className="aspect-square bg-purple-100 overflow-hidden">
+                <img 
+                  src={category.image || "/api/placeholder/400/400"} 
+                  alt={category.name} 
+                  className="w-full h-full object-cover opacity-80"
+                />
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <h3 className="text-3xl font-bold text-white">{category.name}</h3>
+                </div>
               </div>
-            </div>
-          </div>
-          
-          {/* NEVERMIND */}
-          <div className="relative overflow-hidden group">
-            <div className="aspect-square bg-purple-100 overflow-hidden">
-              <img src="/api/placeholder/400/400" alt="NEVERMIND" className="w-full h-full object-cover opacity-80" />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <h3 className="text-3xl font-bold text-white">NEVERMIND</h3>
-              </div>
-            </div>
-          </div>
-          
-          {/* LAMPS */}
-          <div className="relative overflow-hidden group">
-            <div className="aspect-square bg-purple-100 overflow-hidden">
-              <img src="/api/placeholder/400/400" alt="LAMPS" className="w-full h-full object-cover opacity-80" />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <h3 className="text-3xl font-bold text-white">LAMPS</h3>
-              </div>
-            </div>
-          </div>
-          
-          {/* E-FILES */}
-          <div className="relative overflow-hidden group">
-            <div className="aspect-square bg-purple-100 overflow-hidden">
-              <img src="/api/placeholder/400/400" alt="E-FILES" className="w-full h-full object-cover opacity-80" />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <h3 className="text-3xl font-bold text-white">E-FILES</h3>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        {/* Category Grid - Third Row (wider cards) */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {/* CND */}
-          <div className="relative overflow-hidden group">
-            <div className="aspect-square bg-purple-100 overflow-hidden">
-              <img src="/api/placeholder/400/400" alt="CND" className="w-full h-full object-cover opacity-80" />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <h3 className="text-3xl font-bold text-white">CND</h3>
-              </div>
-            </div>
-          </div>
-          
-          {/* ESSENTIALS */}
-          <div className="relative overflow-hidden group">
-            <div className="aspect-square bg-purple-100 overflow-hidden">
-              <img src="/api/placeholder/400/400" alt="ESSENTIALS" className="w-full h-full object-cover opacity-80" />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <h3 className="text-3xl font-bold text-white">ESSENTIALS</h3>
-              </div>
-            </div>
-          </div>
-          
-          {/* CERTIFICATION EVENTS */}
-          <div className="relative overflow-hidden group">
-            <div className="aspect-square bg-purple-100 overflow-hidden">
-              <img src="/api/placeholder/400/400" alt="CERTIFICATION EVENTS" className="w-full h-full object-cover opacity-80" />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <h3 className="text-3xl font-bold text-white text-center">CERTIFICATION EVENTS</h3>
-              </div>
-            </div>
-          </div>
+            </Link>
+          ))}
         </div>
       </section>
 

@@ -1,6 +1,7 @@
+// components/ProductLayout.tsx
 "use client";
 
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useState } from 'react';
 
 interface FilterOption {
   id: string;
@@ -18,30 +19,53 @@ interface FilterSection {
 interface ProductLayoutProps {
   filterSections: FilterSection[];
   children: ReactNode;
-  onFilterChange?: (sectionId: string, optionId: string, checked: boolean) => void;
-  onToggleSection?: (sectionId: string) => void;
   className?: string;
 }
 
 const ProductLayout: React.FC<ProductLayoutProps> = ({
-  filterSections,
+  filterSections: initialFilterSections,
   children,
-  onFilterChange,
-  onToggleSection,
   className = '',
 }) => {
+  // Manage state internally
+  const [filterSections, setFilterSections] = useState(initialFilterSections);
+  const [selectedFilters, setSelectedFilters] = useState<Record<string, string[]>>({});
+
+  // Handle filter change internally
   const handleFilterChange = (sectionId: string, optionId: string, checked: boolean) => {
-    if (onFilterChange) {
-      onFilterChange(sectionId, optionId, checked);
-    }
+    console.log(`Filter changed: ${sectionId} - ${optionId} - ${checked}`);
+    
+    setSelectedFilters(prev => {
+      const updatedFilters = { ...prev };
+      if (!updatedFilters[sectionId]) {
+        updatedFilters[sectionId] = [];
+      }
+      
+      if (checked) {
+        updatedFilters[sectionId] = [...updatedFilters[sectionId], optionId];
+      } else {
+        updatedFilters[sectionId] = updatedFilters[sectionId].filter(id => id !== optionId);
+      }
+      
+      return updatedFilters;
+    });
   };
 
+  // Handle section toggle internally
   const handleToggleSection = (sectionId: string) => {
-    if (onToggleSection) {
-      onToggleSection(sectionId);
-    }
+    console.log(`Toggle section: ${sectionId}`);
+    
+    setFilterSections(prev => 
+      prev.map(section => {
+        if (section.title.toLowerCase().replace(/\s+/g, '-') === sectionId) {
+          return { ...section, expanded: !section.expanded };
+        }
+        return section;
+      })
+    );
   };
 
+  // Rest of your component with the updated event handlers
   return (
     <div className={`flex flex-col lg:flex-row ${className}`}>
       {/* Sidebar Filters */}
@@ -82,6 +106,7 @@ const ProductLayout: React.FC<ProductLayoutProps> = ({
                         option.id,
                         e.target.checked
                       )}
+                      checked={selectedFilters[section.title.toLowerCase().replace(/\s+/g, '-')]?.includes(option.id) || false}
                     />
                     <span className="ml-2 text-base">{option.label}</span>
                     <span className="ml-auto text-gray-500">({option.count})</span>

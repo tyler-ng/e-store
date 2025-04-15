@@ -133,9 +133,7 @@ export default function ProductPage() {
 
             {/* Using the ProductLayout component */}
             <ProductLayout 
-                  filterSections={sections} 
-                  onFilterChange={handleFilterChange}
-                  onToggleSection={handleToggleSection}
+                  filterSections={sections}
             >
             <div className={`grid grid-cols-1 ${viewModeGrid ? 'md:grid-cols-2 lg:grid-cols-3' : 'md:grid-cols-1'} gap-6 overflow-y-auto`}>
                 {/* Using our ProductCard component for each product */}
